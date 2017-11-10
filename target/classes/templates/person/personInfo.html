@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--<html lang="en">-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+
+    <link rel="stylesheet" href="../../static/layui2.1/css/layui.css" />
+    <script src="../../static/js/jquery-1.9.1.min.js"></script>
+    <script src="../../static/layui2.1/layui.js"></script>
+
+</head>
+<body>
+
+<form  id="personForm" class="layui-form layui-form-pane" >
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" autocomplete="off" th:value="${person.name }" placeholder="请输入用户名" class="layui-input" disabled="disabled" />
+        </div>
+    </div>
+    <div class="layui-form-item" pane="">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="sex" th:value="1" title="男" checked="" />
+            <input type="radio" name="sex" th:value="2" title="女" />
+            <input type="radio" name="sex" th:value="禁" title="禁用" disabled="" />
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">出生日期</label>
+            <div class="layui-input-block">
+                <input type="text" name="birthDate" id="date1" th:value="${person.birthDate}" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">毕业学校</label>
+            <div class="layui-input-inline">
+                <input type="text" name="school" th:value="${person.school }" autocomplete="off" class="layui-input" />
+                <input type="hidden" id="hobby1" th:value="${person.hobby}" class="layui-input" />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">爱好</label>
+        <div class="layui-input-block">
+            <select name="hobby" id="hobby" lay-filter="aihao" >
+                <option value=""></option>
+                <option value="0">写作</option>
+                <option value="1" >阅读</option>
+                <option value="2">游戏</option>
+                <option value="3">音乐</option>
+                <option value="4">旅行</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">家庭地址</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容" name="address" class="layui-textarea" th:text="${person.address }"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容" name="note" class="layui-textarea" th:text="${person.note }"></textarea>
+        </div>
+    </div>
+</form>
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(function (){
+        var r = $("#hobby1").val();
+        $("#hobby").val(r);
+    })
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+
+    <link rel="stylesheet" href="../../static/layui2.1/css/layui.css" />
+    <script src="../../static/js/jquery-1.9.1.min.js"></script>
+    <script src="../../static/layui2.1/layui.js"></script>
+
+
+</head>
+<body>
+<div class="demoTable">
+    搜索ID：
+    <div class="layui-inline">
+        <input class="layui-input" name="id" id="demoReload" autocomplete="off" />
+    </div>
+    <button class="layui-btn" data-type="reload" onclick="search()">搜索</button>
+    <button class="layui-btn" data-type="reload" onclick="personAdd()">添加</button>
+</div>
+
+<table class="layui-hide" id="person_table_user" lay-filter="person"></table>
+
+<script type="text/html" id="barPerson">
+    <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+</script>
+
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script type="text/javascript" charset="utf-8">
+
+    $(function (){
+        init();
+    })
+
+    //初始化
+    function init(){
+        layui.use('table', function(){
+            var table = layui.table;
+            //方法级渲染
+            table.render({
+                elem: '#person_table_user'
+                ,url: '/person/personListJson'
+                ,cols: [[
+                    {checkbox: true, fixed: true}
+                    ,{field:'id', title: 'ID', width:80, sort: true, fixed: true}
+                    ,{field:'name', title: '姓名', width:200}
+                    ,{field:'sex', title: '性别', width:200, sort: true,templet:'#sexTpl'}
+                    ,{field:'birthDate', title: '出生日期', width:200}
+                    ,{field:'school', title: '学校', width:200}
+                    ,{field:'address', title: '住址', sort: true, width:200}
+                    ,{field:'note', title: '备注', sort: true, width:200}
+                    ,{fixed: 'right', width:160, align:'center', toolbar: '#barPerson'}
+                ]]
+                ,id: 'testReload'
+                ,page: true
+                ,height: 500
+                ,limit : 10
+                ,request: {
+                    pageName: 'page' //页码的参数名称，默认：page
+                    ,limitName: 'size' //每页数据量的参数名，默认：limit
+                }
+            });
+
+            table.on('tool(person)', function(obj){
+                var data = obj.data;
+                if(obj.event === 'detail'){
+                    personInfo(data.id);
+                } else if(obj.event === 'del'){
+                    personDel(data.id);
+                } else if(obj.event === 'edit'){
+// 				      		layer.alert('编辑行：<br/>'+ JSON.stringify(data))
+                    personEdit(data.id);
+                }
+            });
+
+        });
+
+    }
+
+
+    //搜索
+    function search(){
+        layui.use('table', function(){
+            var table = layui.table;
+            table.reload('testReload', {
+                url: '/layui/layuiListJson'
+                ,where: {
+                    id: $("#demoReload").val()
+                } //设定异步数据接口的额外参数
+                ,height: 300
+            });
+        })
+    }
+
+
+    //弹出窗口
+    function personAdd(){
+        layer.open({
+            title: '人员添加',
+            type: 2,
+            area: ['1100px', '600px'],
+            shade: 0,
+            maxmin: true,
+            content: '/person/personAdd'
+			        ,btn: ['确定', '取消'] //只是为了演示
+            ,yes: function(index,layero){
+                var ibody = layer.getChildFrame('body', index);//获取iframe页面body
+                var form = ibody.find('#personForm');
+                var postData = form.serializeObject();
+                $.ajax({
+                    type : 'post',
+                    data : postData,
+                    url : '/person/save',
+                    dataType : 'json',
+                    success :function (data){
+                        if(data.success){
+                            layer.msg(data.msg);
+                            layer.close(index);
+                            init();
+                        }
+                    }
+                });
+            },end: function () {
+ 			        	window.location.reload();
+            }
+
+        });
+    }
+
+
+    //弹出窗口
+    function personAdd1(){
+        layer.open({
+            title: '人员添加',
+            type: 2,
+            area: ['1100px', '600px'],
+            shade: 0,
+            maxmin: true,
+            content: '/person/personAdd'
+            ,btn: ['确定', '取消'] //只是为了演示
+            ,yes: function(index,layero){
+                var ibody = layer.getChildFrame('body', index);//获取iframe页面body
+                var form = ibody.find('#personForm');
+                debugger;
+                var postData = form.serializeObject();
+                $.ajax({
+                    type : 'post',
+                    data : postData,
+                    url : '/person/save',
+                    dataType : 'json',
+                    success :function (data){
+                        if(data.success){
+                            layer.msg(data.msg);
+                            layer.close(index);
+                            init();
+                        }
+                    }
+                });
+            },end: function () {
+ 			        	window.location.reload();
+            }
+
+        });
+    }
+
+
+
+
+
+    function personEdit(id){
+        layer.open({
+            title: '人员修改',
+            type: 2,
+            area: ['1100px', '600px'],
+            shade: 0,
+            maxmin: true,
+            content: '/person/personEdit?id='+id
+            ,btn: ['确定', '取消'] //只是为了演示
+            ,yes: function(index,layero){
+                var ibody = layer.getChildFrame('body', index);//获取iframe页面body
+                var form = ibody.find('#personForm');
+                var postData = form.serializeObject();
+                $.ajax({
+                    type : 'post',
+                    data : postData,
+                    url : 'person/save',
+                    dataType : 'json',
+                    success :function (data){
+                        if(data.success){
+                            layer.msg(data.msg);
+                            layer.close(index);
+                            init();
+                        }
+                    }
+                });
+            },end: function () {
+// 			        	window.location.reload();
+            }
+
+        });
+    }
+
+    //删除人员信息
+    function personDel(id){
+        layer.confirm('确定要删除吗？', {
+            btn: ['确定','取消'],
+            yes:function(index,layero){
+                $.ajax({
+                    type : 'post',
+                    data : {"id":id},
+                    url : '/person/delete',
+                    dataType : 'json',
+                    success :function (data){
+                        if(data.success){
+                            layer.msg(data.msg);
+                            layer.close(index);
+                            init();
+                        }
+                    }
+                })
+            }
+        });
+    }
+
+
+    function personInfo(id){
+        layer.open({
+            title: '人员查看',
+            type: 2,
+            area: ['1100px', '600px'],
+            shade: 0,
+            maxmin: true,
+            content: '/person/info?id='+id
+            ,btn: ['确定', '取消'] //只是为了演示
+            ,yes: function(index,layero){
+                layer.close(index);
+            },end: function () {
+//			        	window.location.reload();
+            }
+
+        });
+
+
+    }
+
+
+
+
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [ o[this.name] ];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    }
+
+</script>
+
+<script type="text/html" id="sexTpl">
+    {{# if(d.sex==='1') { }}
+    男
+    {{# }else{ }}
+    女
+    {{# }}}
+
+
+</script>
+
+
+
+</body>
+</html>
