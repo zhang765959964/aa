@@ -1,5 +1,6 @@
 package com.zf.controller;
 
+import com.zf.dto.PersonQuery;
 import com.zf.entity.Person;
 import com.zf.repository.PersonRepository;
 import com.zf.service.PersonService;
@@ -9,6 +10,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +20,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * 人员实现层
  * Created by Administrator on 2017/11/8.
  */
+@SuppressWarnings("ALL")
 @RequestMapping("/person")
 @Controller
 public class PersonController {
@@ -53,13 +65,13 @@ public class PersonController {
     @RequestMapping("/personListJson")
     @ResponseBody
     public LayuiDatagrid personListJson(@RequestParam(value = "page", defaultValue = "0")int page,
-                               @RequestParam(value = "size", defaultValue = "15")int size) {
+                                        @RequestParam(value = "size", defaultValue = "15")int size, final PersonQuery personQuery) {
         LayuiDatagrid datagrid = new LayuiDatagrid();
         if(page!=0){
             page-=1;
         }
-
-        Page<Person> pagePerson = personRepository.findAll(new PageRequest(page, size));
+        //findAll
+        Page<Person> pagePerson = personService.findAll(page,size,personQuery);
         datagrid.setCount(pagePerson.getTotalElements());
         datagrid.setData(pagePerson.getContent());
         return datagrid;

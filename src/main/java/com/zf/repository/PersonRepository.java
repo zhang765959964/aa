@@ -3,7 +3,9 @@ package com.zf.repository;
 import com.zf.entity.Person;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -15,7 +17,8 @@ import java.util.List;
  * Created by Administrator on 2017/11/8.
  */
 @Repository
-public interface PersonRepository extends JpaRepository<Person,Long> {
+public interface PersonRepository extends JpaRepository<Person,Long>,JpaSpecificationExecutor<Person> {
+
 
 /*
     @Query("select t from Person t where t.name =:name")

@@ -12,9 +12,13 @@
 </head>
 <body>
 <div class="demoTable">
-    搜索ID：
+    搜索姓名：
     <div class="layui-inline">
         <input class="layui-input" name="id" id="demoReload" autocomplete="off" />
+    </div>
+    学校:
+    <div class="layui-inline">
+        <input class="layui-input" id="school" autocomplete="off" />
     </div>
     <button class="layui-btn" data-type="reload" onclick="search()">搜索</button>
     <button class="layui-btn" data-type="reload" onclick="personAdd()">添加</button>
@@ -87,9 +91,10 @@
         layui.use('table', function(){
             var table = layui.table;
             table.reload('testReload', {
-                url: '/layui/layuiListJson'
+                url: '/person/personListJson'
                 ,where: {
-                    id: $("#demoReload").val()
+                    name : $("#demoReload").val(),
+                    school : $("#school").val()
                 } //设定异步数据接口的额外参数
                 ,height: 300
             });
@@ -125,7 +130,7 @@
                     }
                 });
             },end: function () {
- 			        	window.location.reload();
+// 			        	window.location.reload();
             }
 
         });

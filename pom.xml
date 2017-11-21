@@ -8,6 +8,7 @@
   <name>aa Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
+  <!-- Inherit defaults from Spring Boot -->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -21,41 +22,62 @@
 
   <dependencies>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-
+    <!-- spring boot web支持：mvc,aop... -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+    <!-- 使用mysql 连接 -->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.39</version>
     </dependency>
 
+    <!--SpringData thymeleaf 模板 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
       <version>1.4.0.RELEASE</version>
     </dependency>
 
+    <!-- Jpa  -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
       <version>1.5.1.RELEASE</version>
     </dependency>
 
+    <!-- 热部署 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <optional>true</optional>
     </dependency>
+
+<!--    &lt;!&ndash; 支持JSP &ndash;&gt;
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
+      <version>8.5.6</version>
+      &lt;!&ndash;  <scope>provided</scope>&ndash;&gt;
+    </dependency>
+
+    &lt;!&ndash;对jstl支持的 libs&ndash;&gt;
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>-->
+
+<!--    &lt;!&ndash; shiro spring. &ndash;&gt;
+    <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-spring</artifactId>
+      <version>1.2.3</version>
+    </dependency>-->
+
 
     <dependency>
       <groupId>junit</groupId>
