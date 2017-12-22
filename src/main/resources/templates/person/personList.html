@@ -192,7 +192,7 @@
                 $.ajax({
                     type : 'post',
                     data : postData,
-                    url : 'person/save',
+                    url : '/person/update',
                     dataType : 'json',
                     success :function (data){
                         if(data.success){
@@ -274,7 +274,7 @@
 </script>
 
 <script type="text/html" id="sexTpl">
-    {{# if(d.sex==='1') { }}
+    {{# if(d.sex===1) { }}
     男
     {{# }else{ }}
     女

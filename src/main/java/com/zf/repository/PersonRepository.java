@@ -1,16 +1,14 @@
 package com.zf.repository;
 
 import com.zf.entity.Person;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import javax.transaction.Transactional;
 
 /**
  * 基于Jpa 实现dao接口
@@ -28,6 +26,13 @@ public interface PersonRepository extends JpaRepository<Person,Long>,JpaSpecific
     Page<Person> findByNameNot(String name, Pageable pageable);
 */
 
+
+
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update t_person t set t.name =:name,t.sex =:sex,t.school =:school where t.id = :id",nativeQuery = true)
+    int updatePerson(@Param("name") String name,@Param("sex") Integer sex,@Param("school") String school,@Param("id") Long id);
 
 
 }

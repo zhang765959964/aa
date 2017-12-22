@@ -71,7 +71,8 @@ public class PersonController {
             page-=1;
         }
         //findAll
-        Page<Person> pagePerson = personService.findAll(page,size,personQuery);
+//        Page<Person> pagePerson = personService.findAll(page,size,personQuery);
+        Page<Person> pagePerson = personService.findPersonAll(page,size,personQuery);
         datagrid.setCount(pagePerson.getTotalElements());
         datagrid.setData(pagePerson.getContent());
         return datagrid;
@@ -92,6 +93,24 @@ public class PersonController {
         return j;
 
     }
+
+    @RequestMapping("/update")
+    @ResponseBody
+    public Json update(@Param("id")Long id,@Param("name")String name,@Param("school")String school,@Param("sex") Integer sex){
+        Json j = new Json();
+        int i =  personRepository.updatePerson(name,sex,school,id);
+        if(i>0){
+            j.setSuccess(true);
+            j.setMsg("修改成功");
+        }else{
+            j.setSuccess(false);
+            j.setMsg("修改失败");
+        }
+
+        return  j;
+    }
+
+
 
 
     @RequestMapping("/delete")
