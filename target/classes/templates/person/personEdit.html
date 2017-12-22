@@ -18,14 +18,23 @@
     <div class="layui-form-item">
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-block" >
+            <input type="hidden" name="id" th:value="${person.id}" autocomplete="off"  placeholder="请输入用户名" class="layui-input" />
             <input type="text" name="name" th:value="${person.name}" autocomplete="off"  placeholder="请输入用户名" class="layui-input" />
         </div>
     </div>
     <div class="layui-form-item" pane="">
         <label class="layui-form-label">性别</label>
-        <div class="layui-input-block">
-            <input type="radio" name="sex" th:value="1" title="男" checked="checked" />
-            <input type="radio" name="sex" th:value="2" title="女" />
+        <div class="layui-input-block"  >
+
+            <span th:if="${person.sex} ==1 ">
+                <input type="radio" name="sex"  value="1" title="男"  checked="checked"/>
+                <input type="radio" name="sex"  value="2" title="女" />
+            </span>
+
+            <span th:if="${person.sex} ==2 ">
+                <input type="radio" name="sex"  value="1" title="男" />
+                <input type="radio" name="sex"  value="2" title="女"  checked="checked"/>
+            </span>
         </div>
     </div>
 
@@ -54,9 +63,10 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label">爱好</label>
-        <div class="layui-input-block">
-            <select name="hobby" id="hobby" lay-filter="aihao" >
-                <option value="99">请选择</option>
+        <div class="layui-input-inline" >
+            <input type="hidden"  th:value="${person.hobby}"  id="in_hobby" />
+            <select name="hobby" id="hobby" lay-filter="filter" lay-verify="required" >
+                <option value="">请选择</option>
                 <option value="0"> 写作</option>
                 <option value="1">阅读</option>
                 <option value="2">游戏</option>
@@ -89,6 +99,8 @@
 
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
+
+
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form
             , layer = layui.layer
@@ -100,8 +112,24 @@
             elem: '#date1'
         });
 
+
+        form.on('select(filter)', function(data){
+            var s = $("#in_hobby").val();
+            var news = data.value;
+            if(s==news){
+                $("#filter").val('');
+                $("#in_hobby").val('');
+                form.render('select');
+            }else{
+                $("#filter").val(news);
+                form.render('select');
+            }
+        });
+
+
         //创建一个编辑器
         var editIndex = layedit.build('LAY_demo_editor');
+
 
 
       /*  //监听提交
@@ -122,8 +150,11 @@
             return false;
         });*/
 
-
     });
+
+
+
+
 </script>
 
 </body>

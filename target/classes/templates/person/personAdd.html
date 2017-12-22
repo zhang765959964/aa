@@ -53,8 +53,8 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label">爱好</label>
-        <div class="layui-input-block">
-            <select name="hobby" id="hobby" lay-filter="aihao" >
+        <div class="layui-input-inline">
+            <select name="hobby" id="hobby" lay-filter="filter"  lay-verify="required" >
                 <option value="99">请选择</option>
                 <option value="0"> 写作</option>
                 <option value="1">阅读</option>
@@ -97,6 +97,12 @@
         //日期
         laydate.render({
             elem: '#date1'
+        });
+
+
+        form.on('select(filter)', function(data){
+            console.log(data.elem); //得到select原始DOM对象
+            console.log(data.value); //得到被选中的值
         });
 
         //创建一个编辑器
